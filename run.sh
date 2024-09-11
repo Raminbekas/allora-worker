@@ -1,19 +1,18 @@
 #!/bin/bash
 
-rpc="https://allora-rpc.testnet.allora.network"
+rpc="https://rpc.ankr.com/allora_testnet/a7c263b7e9691171af21cd0883bf0dc323fa2771b113d10a8cc415edaef2fd2c"
 
 read -p "Enter your worker index: " index
 read -p "Enter your mnemonic phrase: " mnemonic_phrase
-read -p "Enter your upshot apikey: " upshot_apikey
+read -p "Enter your CryptoCompare API key: " cryptocompare_apikey
 
 mkdir worker-data-$index 
 chmod -R 777 worker-data-$index
 
 cat << EOF > .env
 RPC=$rpc
-UPSHOT_APIKEY="$upshot_apikey"
+CRYPTOCOMPARE_APIKEY="$cryptocompare_apikey"
 EOF
-
 
 cat << EOF > docker-compose.yaml
 services:
@@ -35,7 +34,6 @@ services:
     env_file:
       - ./worker-data-$index/env_file
 EOF
-
 
 cat << EOF > init.config
 #!/bin/bash
@@ -84,7 +82,6 @@ else
     echo "config.json is already loaded, skipping the operation. You can set ENV_LOADED variable to false in ./worker-data-$index/env_file to reload the config.json"
 fi
 EOF
-
 
 cat <<EOF > config.json
 {
